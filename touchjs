@@ -1,0 +1,226 @@
+var config = {
+    apiKey: "AIzaSyBSBc6_i93v9Z71wlY-32kB3d9ukfh67rE",
+    authDomain: "attend-checker-49825.firebaseapp.com",
+    databaseURL: "https://attend-checker-49825.firebaseio.com",
+    projectId: "attend-checker-49825",
+    storageBucket: "attend-checker-49825.appspot.com",
+    messagingSenderId: "1069010355903",
+    appId: "1:1069010355903:web:a40b515888556333"
+};
+firebase.initializeApp(config);
+var firestore = firebase.firestore();
+var docRef = firestore.collection("classes").doc("Activity1");
+
+
+
+
+
+
+function QRCodeMaker() {
+	console.log(classPass);
+	document.getElementById("coffee").innerText = null;
+	var link = String(Math.floor(Math.random() * 10));
+	for (var i = 0; i < 100; i++) {
+		var num = String(Math.floor(Math.random() * 10));
+		link = link + num;
+	}
+	link = "Activity1" + "/" + link
+	$("#coffee").qrcode({
+		text:  link,
+		width: 600,
+		height: 600
+	});
+
+	docRef.update({
+		ClassPass: link
+	}).then(function() {
+		console.log("Status saved!");
+	});
+}
+
+
+
+ function presentTime(){
+        var hiduke = new Date(); 
+        var year = hiduke.getFullYear();
+        var month = hiduke.getMonth()+1;
+        var week = hiduke.getDay();
+        var day = hiduke.getDate();
+        var yobi= new Array("日","月","火","水","木","金","土");
+        var jikan= new Date();
+        var hour = jikan.getHours();
+        var minute = jikan.getMinutes();
+        var data = "西暦"+year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日\n"+ hour+"時"+minute+"分";
+        document.getElementById("time").innerText = data;
+
+ }
+
+
+
+
+window.onload = function() {
+	QRCodeMaker();
+	presentTime();
+	setInterval("QRCodeMaker()", 3000);
+	setInterval("presentTime()", 1000);
+}
+
+
+
+function addCode(key){
+	var code = document.forms[0].code;
+	if(code.value.length < 7){
+		code.value = code.value + key;
+	}
+	if(code.value.length == 7){
+	}
+}
+
+function deleteall() {
+	var code = document.forms[0].code;
+	code.value = "";
+}
+function back() {
+	var code = document.forms[0].code;
+	back = code.slice( 0, -1 );
+}
+
+function submitForm(){
+	document.forms[0].submit();
+}
+
+function emptyCode(){
+	document.forms[0].code.value = "";
+}
+
+
+
+
+
+
+
+function attentionProperties(obj) {
+    var properties = '';
+    for (var prop in obj){
+    	if (prop == "ClassPass") {
+    		console.log("Did not prited data.")
+    	} else {
+    		switch (obj[prop]) {
+    			case true:
+        			properties += prop + ': 出席' + '\n';
+        			break;
+    			case false:
+    				properties += prop + ': 欠席' + '\n';
+    				break;
+    		}
+        }
+    }
+    return properties;
+}
+function getProperties(obj, userName, passWord) {
+    var properties = '';
+	var alertCount = 0;
+    for (var prop in obj){
+    	if (prop == userName) {
+    		if (obj[prop] == passWord) {
+    			alert("学籍番号：" + prop + "\nで出席しました");
+    		} else {
+    			alert("馬鹿野郎");
+    		}
+    	}
+    }
+    return properties;
+}
+
+
+function readingData(){
+ 	var obj = document.getElementById("SubjectSelecter");
+ 	var idx = obj.selectedIndex;       //インデックス番号を取得
+ 	var txt  = obj.options[idx].text;  //ラベルを取得
+	firestore.collection("classes").doc(txt).get().then(function(doc) {
+ 		if (doc.exists) {
+ 	       console.log("Document data:", doc.data());
+ 	       document.getElementById("dataViewer").innerText = attentionProperties(doc.data())
+ 	       
+ 	  	} else {
+	       console.log("No such document!");
+	       document.getElementById("dataViewer").innerText = "Sorry, there is no such data.\nReload this window or Choose other subject.";
+  		}
+	}).catch(function(error) {
+ 	   console.log("Error getting document:", error);
+	});
+}
+
+
+function attention(){
+	var name = document.getElementById("StudentID").textContent;
+	var pass = document.getElementById("OnetimePass").textContent;
+	alert("学籍番号：" + name + "\nパスワード：" + pass);
+	firestore.collection("classes").doc("Activity1").get().then(function(doc){
+		if (doc.exists) {
+			getProperties(doc.data(), name, pass);
+		} else{
+			alert("馬鹿野郎");
+		}
+	}).catch(function(error) {
+ 	   console.log("Error getting document:", error);
+	});
+}
+
+
+
+function travel(){
+	var StudentNum = ""
+	var StudentNum = String(document.getElementById("DisplayNum").value);
+
+	document.getElementById("StudentID").innerText = StudentNum + "\n";
+}
+
+function travel2(){
+	var StudentNum = ""
+	var StudentNum = String(document.getElementById("DisplayNum").value);
+
+	document.getElementById("OnetimePass").innerText = StudentNum + "\n";
+}
+function alertfunction(){
+	alert("出席しました");
+}
+
+ function secretTime1(){
+      var jikan= new Date();
+        var second = jikan.getSeconds();
+  		if (second < 10) second = '0' + second;
+        Number(second);
+
+        console.log(second);
+
+ }
+ function secretTime2(){
+        var jikan= new Date();
+        var second = jikan.getSeconds();
+         Number(second);
+  		if (second < 10) second = '0' + second;
+        console.log(second);
+
+ }
+ function diff(){
+var d1 = secretTime1();
+var d2 = secretTime2();
+
+var diffTime = d2 - d1;
+var diffSecond = Math.floor(diffTime / 1000);
+console.log(diffSecond); 
+}
+
+function different(){
+if (diffSecond <= 10) {
+	window.location.href = 'https://www.google.co.jp/'
+}else{
+	console.log("やり直してください")
+  }
+}
+
+function dropsort() {
+    var browser = document.sort_form.sort.value;
+    location.href = "index.html"
+}
