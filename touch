@@ -1,0 +1,51 @@
+<head>
+	<meta charset="utf-8">
+	<title>入室管理</title>
+	<meta mane="description" content="ボタンで番号を打ち込むと入室を感知">
+	<meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+	<link rel="stylesheet" type="text/css" href="AttendChecker.css">
+	<script type="text/javascript" src="Test.js"></script>
+
+
+	<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script>
+    <script type="text/javaScript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javaScript" src="js/jquery.qrcode.min.js"></script>
+    <script type="text/javaScript" src="js/AttendChecker.js"></script>
+</head>
+
+<body onload="emptyCode();">
+	<p id="StudentID"></p>
+	<p id="OnetimePass"></p>
+	<h1 id="time"></h1>
+<form action="code.htm" method="get">
+<table id="keypad" cellpadding="5" cellspacing="3">
+	<tr>
+    	<td onclick="addCode('1');">1</td>
+        <td onclick="addCode('2');">2</td>
+        <td onclick="addCode('3');">3</td>
+      
+    </tr>
+    <tr>
+    	<td onclick="addCode('4');">4</td>
+        <td onclick="addCode('5');">5</td>
+        <td onclick="addCode('6');">6</td>
+    </tr>
+    <tr>
+    	<td onclick="addCode('7');">7</td>
+        <td onclick="addCode('8');">8</td>
+        <td onclick="addCode('9');">9</td>
+    </tr>
+    <tr>
+		<td href="index.html" onClick="history.back(); return false;">back</td>
+		<td onclick="addCode('0');">0</td>
+        <td onclick="deleteall();">clear</td>
+        <td onclick="travel();deleteall()">学籍 番号</td>
+        <td onclick="travel2();deleteall()">パスワード</td>
+        <td onclick="attention()">確定</td>
+    </tr>
+   <input type="passsword" name="code" value="" id="DisplayNum" maxlength="7" readonly="readonly" />
+</table>
+</form>
+</body>
